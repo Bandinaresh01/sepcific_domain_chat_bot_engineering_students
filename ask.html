@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduChat - {{ subject|replace('_', ' ')|title }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #6366f1;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .subject-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .subject-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .chat-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .message {
+            max-width: 80%;
+            padding: 1rem;
+            border-radius: 12px;
+            line-height: 1.5;
+        }
+        .user-message {
+            align-self: flex-end;
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .assistant-message {
+            align-self: flex-start;
+            background-color: #f1f5f9;
+            color: var(--dark-color);
+            border-bottom-left-radius: 4px;
+        }
+        .message-time {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+            background-color: white;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .chat-input input:focus {
+            border-color: var(--primary-color);
+        }
+        .send-btn {
+            margin-left: 1rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .send-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        .typing-indicator {
+            align-self: flex-start;
+            background-color: #f1f5f9;
+            color: var(--dark-color);
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+            display: none;
+        }
+        .typing-dots {
+            display: flex;
+            gap: 0.3rem;
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #64748b;
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typingAnimation {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-5px);
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            .chat-container {
+                height: 80vh;
+            }
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="subject-title">
+                <div class="subject-icon">{{ subject|upper|replace('_', ' ')|first }}</div>
+                <h1>{{ subject|replace('_', ' ')|title }}</h1>
+            </div>
+            <a href="{{ url_for('index') }}" class="back-btn">← Back to Subjects</a>
+        </div>
+        <div class="chat-container">
+            <div class="chat-header">
+                {{ subject|replace('_', ' ')|title }} Syllabus Assistant
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                {% if session_histories and session_histories.get(subject) %}
+                    {% for question, answer in session_histories[subject] %}
+                        <div class="message user-message">
+                            {{ question }}
+                            <div class="message-time">{{ loop.index }} message ago</div>
+                        </div>
+                        <div class="message assistant-message">
+                            {{ answer }}
+                            <div class="message-time">{{ loop.index }} message ago</div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="message assistant-message">
+                        Hello! I'm your {{ subject|replace('_', ' ')|title }} assistant. Ask me anything about the syllabus and I'll try to help based on the course materials.
+                        <div class="message-time">Just now</div>
+                    </div>
+                {% endif %}
+                {% if question and answer %}
+                    <div class="message user-message">
+                        {{ question }}
+                        <div class="message-time">Just now</div>
+                    </div>
+                    <div class="message assistant-message">
+                        {{ answer }}
+                        <div class="message-time">Just now</div>
+                    </div>
+                {% endif %}
+                <div class="typing-indicator" id="typing-indicator">
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <form method="POST" class="chat-input" id="chat-form">
+                <input type="text" name="user_query" id="user-query" placeholder="Ask a question about {{ subject|replace('_', ' ')|title }}..." required autofocus>
+                <button type="submit" class="send-btn">Send</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chat-messages');
+            const chatForm = document.getElementById('chat-form');
+            const userQuery = document.getElementById('user-query');
+            const typingIndicator = document.getElementById('typing-indicator');
+            
+            // Scroll to bottom of chat
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Handle form submission with AJAX
+            chatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const question = userQuery.value.trim();
+                if (!question) return;
+                
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user-message';
+                userMessage.innerHTML = question + '<div class="message-time">Just now</div>';
+                chatMessages.appendChild(userMessage);
+                
+                // Show typing indicator
+                typingIndicator.style.display = 'block';
+                
+                // Clear input
+                userQuery.value = '';
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Submit form data via AJAX
+                fetch(window.location.href, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        'user_query': question
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    // Parse response
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const answerElements = doc.querySelectorAll('.message.assistant-message');
+                    const answer = answerElements.length > 0 ? 
+                        answerElements[answerElements.length - 1].textContent.trim() : 
+                        "Sorry, I couldn't process your question. Please try again.";
+                    
+                    // Hide typing indicator
+                    typingIndicator.style.display = 'none';
+                    
+                    // Add assistant message
+                    const assistantMessage = document.createElement('div');
+                    assistantMessage.className = 'message assistant-message';
+                    assistantMessage.innerHTML = answer + '<div class="message-time">Just now</div>';
+                    chatMessages.appendChild(assistantMessage);
+                    
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    typingIndicator.style.display = 'none';
+                    
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'message assistant-message';
+                    errorMessage.innerHTML = `❌ Error: ${error.message}. Please try again.` + 
+                                            '<div class="message-time">Just now</div>';
+                    chatMessages.appendChild(errorMessage);
+                    
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

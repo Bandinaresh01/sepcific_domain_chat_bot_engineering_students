@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduChat - Select Your Subject</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #6366f1;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .subject-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .subject-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        .subject-info {
+            padding: 1.5rem;
+        }
+        .subject-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        .subject-description {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to EduChat</h1>
+            <p class="subtitle">Select a subject to start exploring the syllabus and ask questions about the course content.</p>
+        </header>
+        <div class="subjects-grid">
+            <a href="{{ url_for('ask', subject='big_data') }}" class="subject-card">
+                <div class="subject-image" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                <div class="subject-info">
+                    <h3 class="subject-name">Big Data</h3>
+                    <p class="subject-description">Explore concepts of large-scale data processing, Hadoop, Spark, and distributed systems.</p>
+                    <div class="btn">Start Learning</div>
+                </div>
+            </a>
+            <a href="{{ url_for('ask', subject='ccv') }}" class="subject-card">
+                <div class="subject-image" style="background-image: url('https://images.unsplash.com/photo-1574717024453-3545edf62d0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                <div class="subject-info">
+                    <h3 class="subject-name">Computer Vision</h3>
+                    <p class="subject-description">Learn about image processing, object detection, neural networks and visual recognition.</p>
+                    <div class="btn">Start Learning</div>
+                </div>
+            </a>
+            <a href="{{ url_for('ask', subject='krr') }}" class="subject-card">
+                <div class="subject-image" style="background-image: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                <div class="subject-info">
+                    <h3 class="subject-name">Knowledge Representation</h3>
+                    <p class="subject-description">Study logical formalisms, ontologies, and reasoning about knowledge in AI systems.</p>
+                    <div class="btn">Start Learning</div>
+                </div>
+            </a>
+            <a href="{{ url_for('ask', subject='pr') }}" class="subject-card">
+                <div class="subject-image" style="background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                <div class="subject-info">
+                    <h3 class="subject-name">Pattern Recognition</h3>
+                    <p class="subject-description">Understand classification, clustering, feature extraction and machine learning patterns.</p>
+                    <div class="btn">Start Learning</div>
+                </div>
+            </a>
+        </div>
+        <footer>
+            <p>© 2023 EduChat - AI-Powered Syllabus Assistant</p>
+        </footer>
+    </div>
+</body>
+</html>
